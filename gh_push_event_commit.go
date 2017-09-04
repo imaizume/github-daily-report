@@ -1,5 +1,7 @@
 package main
 
+import("github.com/google/go-github/github")
+
 type GHPushEventCommit []github.PushEventCommit
 
 func (e GHPushEventCommit) Len() int {

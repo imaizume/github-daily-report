@@ -1,5 +1,7 @@
 package main
 
+import("github.com/google/go-github/github")
+
 type GHEvent []github.Event
 
 func (e GHEvent) Len() int {
