@@ -17,6 +17,9 @@ const errorMessage string = "json.Unmarshal failed with '%s'\n"
 
 var (
 	yourName = "Tomohiro Imaizumi"
+	ghName = "imaizume"
+	branchPattern = regexp.MustCompile(`(imaizumi\.\d+\.[\d\w_\.]+|develop\.v4\.0\.2\.master\.merge)$`)
+	limitTime = time2.Now().Add(-time2.Hour * 18)
 )
 
 func (t *TokenSource) Token() (*oauth2.Token, error) {
@@ -90,11 +93,10 @@ func DoFetchEvents(client *github.Client) {
 
 func ParseComments(comments *[]github.Event) {
 	for _, comment := range *comments {
-		if comment.Actor.GetLogin() != "imaizume" {
+		if comment.Actor.GetLogin() != ghName {
 			continue
 		}
 		creationTime := comment.CreatedAt.Local()
-		limitTime := time2.Now().Add(-time2.Hour * 18)
 		if creationTime.Before(limitTime) {
 			continue
 		}
@@ -104,13 +106,11 @@ func ParseComments(comments *[]github.Event) {
 			fmt.Printf(errorMessage, marshalError)
 			return
 		}
-		comment := t.Comment.GetBody()
-		line := strings.Replace(comment, "\n", " ", -1)
+		line := strings.Replace(t.Comment.GetBody(), "\n", " ", -1)
 		line2 := strings.Replace(line, "\r\n", " ", -1)
 		line3 := strings.Replace(line2, "\r", " ", -1)
 		creation := t.Comment.CreatedAt.Local()
 		fmt.Printf("- [%d:%d] %s\n", creation.Hour(), creation.Minute(), line3)
-		// fmt.Printf("[%d:%d] %s", creation.Hour(), creation.Minute(), line)
 	}
 	fmt.Printf("\n### Note\n\n")
 }
@@ -120,11 +120,10 @@ func ParseCommits(pushes *[]github.Event) {
 	sort.Sort(evt)
 	var lastBranchName string = ""
 	for _, push := range *pushes {
-		if push.Actor.GetLogin() != "imaizume" {
+		if push.Actor.GetLogin() != ghName {
 			continue
 		}
 		creationTime := push.CreatedAt.Local()
-		limitTime := time2.Now().Add(-time2.Hour * 18)
 		if creationTime.Before(limitTime) {
 			continue
 		}
@@ -134,7 +133,6 @@ func ParseCommits(pushes *[]github.Event) {
 			fmt.Printf(errorMessage, marshalError)
 			return
 		}
-		branchPattern := regexp.MustCompile(`(imaizumi\.\d+\.[\d\w_\.]+|develop\.v4\.0\.2\.master\.merge)$`)
 		branchName := t.GetRef()
 		matches := branchPattern.FindAllStringSubmatch(branchName, -1)
 		if len(matches) > 0 {
