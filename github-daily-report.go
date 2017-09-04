@@ -112,7 +112,7 @@ func ParseComments(comments *[]github.Event) {
 }
 
 func ParseCommits(pushes *[]github.Event) {
-	var evt GHEvent = *pushes
+	var evt GHEvents = *pushes
 	sort.Sort(evt)
 	var lastBranchName string = ""
 	for _, push := range *pushes {
@@ -144,7 +144,7 @@ func ParseCommits(pushes *[]github.Event) {
 }
 
 func DissolvePushToCommits(push *github.PushEvent, username string) []string {
-	var cmt GHPushEventCommit = push.Commits
+	var cmt GHPushEventCommits = push.Commits
 	sort.Sort(cmt)
 	lines := []string{}
 	for _, v := range cmt {
