@@ -144,7 +144,7 @@ func ParseCommits(pushes *[]github.Event) {
 }
 
 func DissolvePushToCommits(push *github.PushEvent, username string) []string {
-	var cmt Cmt = push.Commits
+	var cmt GHPushEventCommit = push.Commits
 	sort.Sort(cmt)
 	lines := []string{}
 	for _, v := range cmt {
@@ -170,16 +170,16 @@ func Filter(vs []*github.Event, t string, f func(github.Event, string) bool) []g
 }
 
 type Psh []github.PushEvent
-type Cmt []github.PushEventCommit
+type GHPushEventCommit []github.PushEventCommit
 
-func (e Cmt) Len() int {
+func (e GHPushEventCommit) Len() int {
 	return len(e)
 }
 
-func (p Cmt) Swap(i, j int) {
+func (p GHPushEventCommit) Swap(i, j int) {
 	p[i], p[j] = p[j], p[i]
 }
 
-func (event Cmt) Less(i, j int) bool {
+func (event GHPushEventCommit) Less(i, j int) bool {
 	return event[i].GetTimestamp().Time.After(event[i].GetTimestamp().Time)
 }
