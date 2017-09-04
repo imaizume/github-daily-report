@@ -110,7 +110,7 @@ func ParseComments(comments *[]github.Event) {
 		line2 := strings.Replace(line, "\r\n", " ", -1)
 		line3 := strings.Replace(line2, "\r", " ", -1)
 		creation := t.Comment.CreatedAt.Local()
-		fmt.Printf("- [%d:%d] %s\n", creation.Hour(), creation.Minute(), line3)
+		fmt.Printf("- [%02d:%02d] %s\n", creation.Hour(), creation.Minute(), line3)
 	}
 	fmt.Printf("\n### Note\n\n")
 }
