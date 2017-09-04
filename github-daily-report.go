@@ -170,16 +170,3 @@ func Filter(vs []*github.Event, t string, f func(github.Event, string) bool) []g
 }
 
 type Psh []github.PushEvent
-type GHPushEventCommit []github.PushEventCommit
-
-func (e GHPushEventCommit) Len() int {
-	return len(e)
-}
-
-func (p GHPushEventCommit) Swap(i, j int) {
-	p[i], p[j] = p[j], p[i]
-}
-
-func (event GHPushEventCommit) Less(i, j int) bool {
-	return event[i].GetTimestamp().Time.After(event[i].GetTimestamp().Time)
-}
