@@ -112,7 +112,7 @@ func ParseComments(comments *[]github.Event) {
 }
 
 func ParseCommits(pushes *[]github.Event) {
-	var evt Evt = *pushes
+	var evt GHEvent = *pushes
 	sort.Sort(evt)
 	var lastBranchName string = ""
 	for _, push := range *pushes {
@@ -169,19 +169,19 @@ func Filter(vs []*github.Event, t string, f func(github.Event, string) bool) []g
 	return vsf
 }
 
-type Evt []github.Event
+type GHEvent []github.Event
 type Psh []github.PushEvent
 type Cmt []github.PushEventCommit
 
-func (e Evt) Len() int {
+func (e GHEvent) Len() int {
 	return len(e)
 }
 
-func (p Evt) Swap(i, j int) {
+func (p GHEvent) Swap(i, j int) {
 	p[i], p[j] = p[j], p[i]
 }
 
-func (event Evt) Less(i, j int) bool {
+func (event GHEvent) Less(i, j int) bool {
 	return event[i].GetCreatedAt().After(event[i].GetCreatedAt())
 }
 
