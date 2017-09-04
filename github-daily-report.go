@@ -92,7 +92,9 @@ func DoFetchEvents(client *github.Client) {
 }
 
 func ParseComments(comments *[]github.Event) {
-	for _, comment := range *comments {
+	var evt GHEvents = *comments
+	sort.Sort(evt)
+	for _, comment := range evt {
 		if comment.Actor.GetLogin() != ghName {
 			continue
 		}
@@ -119,7 +121,7 @@ func ParseCommits(pushes *[]github.Event) {
 	var evt GHEvents = *pushes
 	sort.Sort(evt)
 	var lastBranchName string = ""
-	for _, push := range *pushes {
+	for _, push := range evt {
 		if push.Actor.GetLogin() != ghName {
 			continue
 		}
