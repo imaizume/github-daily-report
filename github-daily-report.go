@@ -169,21 +169,8 @@ func Filter(vs []*github.Event, t string, f func(github.Event, string) bool) []g
 	return vsf
 }
 
-type GHEvent []github.Event
 type Psh []github.PushEvent
 type Cmt []github.PushEventCommit
-
-func (e GHEvent) Len() int {
-	return len(e)
-}
-
-func (p GHEvent) Swap(i, j int) {
-	p[i], p[j] = p[j], p[i]
-}
-
-func (event GHEvent) Less(i, j int) bool {
-	return event[i].GetCreatedAt().After(event[i].GetCreatedAt())
-}
 
 func (e Cmt) Len() int {
 	return len(e)
