@@ -15,10 +15,6 @@ import (
 
 const errorMessage string = "json.Unmarshal failed with '%s'\n"
 
-type TokenSource struct {
-	AccessToken string
-}
-
 var(
 	yourName = "Tomohiro Imaizumi"
 )
