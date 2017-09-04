@@ -15,7 +15,7 @@ import (
 
 const errorMessage string = "json.Unmarshal failed with '%s'\n"
 
-var(
+var (
 	yourName = "Tomohiro Imaizumi"
 )
 
@@ -80,7 +80,7 @@ func DoFetchEvents(client *github.Client) {
 		pullRequestReviewCommentEvents := Filter(evt, "PullRequestReviewCommentEvent", IsType)
 		reviews = append(reviews, pullRequestReviewCommentEvents...)
 	}
-  fmt.Printf("\n# Daily Report: %s %s\n", yourName, time2.Now().Format("2006-01-02"))
+	fmt.Printf("\n# Daily Report: %s %s\n", yourName, time2.Now().Format("2006-01-02"))
 	fmt.Printf("\n## Commits\n\n")
 	ParseCommits(&pushes)
 	fmt.Printf("\n")
@@ -90,10 +90,14 @@ func DoFetchEvents(client *github.Client) {
 
 func ParseComments(comments *[]github.Event) {
 	for _, comment := range *comments {
-		if comment.Actor.GetLogin() != "imaizume" { continue }
+		if comment.Actor.GetLogin() != "imaizume" {
+			continue
+		}
 		creationTime := comment.CreatedAt.Local()
 		limitTime := time2.Now().Add(-time2.Hour * 18)
-		if creationTime.Before(limitTime) { continue }
+		if creationTime.Before(limitTime) {
+			continue
+		}
 		var t github.IssueCommentEvent
 		marshalError := json.Unmarshal(*comment.RawPayload, &t)
 		if marshalError != nil {
@@ -116,10 +120,14 @@ func ParseCommits(pushes *[]github.Event) {
 	sort.Sort(evt)
 	var lastBranchName string = ""
 	for _, push := range *pushes {
-		if push.Actor.GetLogin() != "imaizume" { continue }
+		if push.Actor.GetLogin() != "imaizume" {
+			continue
+		}
 		creationTime := push.CreatedAt.Local()
 		limitTime := time2.Now().Add(-time2.Hour * 18)
-		if creationTime.Before(limitTime) { continue }
+		if creationTime.Before(limitTime) {
+			continue
+		}
 		var t github.PushEvent
 		marshalError := json.Unmarshal(*push.RawPayload, &t)
 		if marshalError != nil {
@@ -149,7 +157,9 @@ func DissolvePushToCommits(push *github.PushEvent, username string) []string {
 	lines := []string{}
 	for _, v := range cmt {
 		message := strings.Split(v.GetMessage(), "\n")
-		if v.Author.GetName() != username { continue }
+		if v.Author.GetName() != username {
+			continue
+		}
 		lines = append(lines, fmt.Sprintf("- (%s) %s", v.GetSHA()[0:6], message[0]))
 	}
 	return lines
