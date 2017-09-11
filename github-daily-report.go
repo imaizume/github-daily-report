@@ -1,25 +1,25 @@
 package main
 
 import (
-	"golang.org/x/oauth2"
-	"github.com/google/go-github/github"
 	"context"
-	"fmt"
 	"encoding/json"
+	"fmt"
+	"github.com/google/go-github/github"
+	"golang.org/x/oauth2"
+	"os"
 	"regexp"
 	"sort"
 	"strings"
 	time2 "time"
-	"os"
 )
 
 const errorMessage string = "json.Unmarshal failed with '%s'\n"
 
 var (
-	yourName = "Tomohiro Imaizumi"
-	ghName = "imaizume"
-	branchPattern = regexp.MustCompile(`(imaizumi\.\d+\.[\d\w_\.]+|develop\.v4\.0\.2\.master\.merge)$`)
-	limitTime = time2.Now().Add(-time2.Hour * 18)
+	yourName      = "Tomohiro Imaizumi"
+	ghName        = "imaizume"
+	branchPattern = regexp.MustCompile(`(imaizum[ei]\.\d+\.[\d\w_\.]+|develop\.v4\.0\.2\.master\.merge)$`)
+	limitTime     = time2.Now().Add(-time2.Hour * 18)
 )
 
 func (t *TokenSource) Token() (*oauth2.Token, error) {
@@ -39,8 +39,8 @@ func main() {
 		AccessToken: personalAccessToken,
 	}
 	oauthClient := oauth2.NewClient(context.Background(), tokenSource)
-	client := github.NewClient(oauthClient)
-	DoFetchEvents(client)
+	client := *github.NewClient(oauthClient)
+	DoFetchEvents(&client)
 }
 
 func DoFetchEvents(client *github.Client) {
