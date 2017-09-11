@@ -147,8 +147,8 @@ func ParseCommits(pushes *[]github.Event) {
 				fmt.Println(l)
 			}
 		}
-		fmt.Printf("\n### Note\n\n")
 	}
+	fmt.Printf("\n### Note\n\n")
 }
 
 func DissolvePushToCommits(push *github.PushEvent, username string) []string {
