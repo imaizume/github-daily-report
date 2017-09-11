@@ -106,7 +106,7 @@ func ParseComments(comments *[]github.Event) {
 		marshalError := json.Unmarshal(*comment.RawPayload, &t)
 		if marshalError != nil {
 			fmt.Printf(errorMessage, marshalError)
-			return
+			continue
 		}
 		line := strings.Replace(t.Comment.GetBody(), "\n", " ", -1)
 		line2 := strings.Replace(line, "\r\n", " ", -1)
